@@ -1,21 +1,21 @@
-# Importando o Flask
+# Importando Flask
 from flask import Flask, render_template
 import pymysql.cursors
 # Importando as rotas que estão nos controllers
 from controllers import routes
-# importante o PyMySQL
+# Importando PyMySQL
 import pymysql
-# importando o model
+# Importando model
 from models.database import db
 
 # Carregando o Flask na variável app
 app = Flask(__name__, template_folder='views')
 
-# define o nome do banco de dados
+# Nome BD
 DB_NAME = 'games'
 app.config['DATABASE_NAME'] = DB_NAME
 
-# passando o endereço do banco ao Flask
+# passando endereço do bd ao Flask
 app.config['SQLALCHEMY_DATABASE_URI'] = f'mysql://root@localhost/{DB_NAME}'
 # caso for colocar senha, usase mysql://root:[senha]@localhost
 
@@ -25,7 +25,7 @@ routes.init_app(app)
 
 # Iniciando o servidor no localhost, porta 5000, modo de depuração ativado
 if __name__ == '__main__':
-    # conectando ao mysql e criando o banco de dados com suas tabelas
+    # conectando ao mysql e criando o bd
     connection = pymysql.connect(host='localhost',
                                  user='root',
                                  password='',
@@ -34,7 +34,7 @@ if __name__ == '__main__':
     
     try:
         with connection.cursor() as cursor:
-            # executando a query para criar o banco
+            # Executando a query para criar o banco
             cursor.execute(f"CREATE DATABASE IF NOT EXISTS {DB_NAME}")
             print("O banco de dados está criado!")
         
@@ -44,7 +44,7 @@ if __name__ == '__main__':
     finally:
         connection.close()
         
-    # criando as tabelas
+    # Criando tabelas
     db.init_app(app=app)
     with app.test_request_context():
         db.create_all()
